@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}VHire Landing Page{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section shadow p-3 mb-5 bg-white rounded" style="margin-top: 50px;">
+        <h2 class="section-heading">Overview</h2>
+        <p>VHire is revolutionizing the hiring process by managing the initial stages of candidate evaluation, making it easier and more efficient for companies to find the right talent.</p>
+    </div>
+    <div class="section shadow p-3 mb-5 bg-white rounded">
+        <h2 class="section-heading">Features</h2>
+        <ul>
+            <li>Comprehensive online assessments</li>
+            <li>Streamlined candidate evaluation process</li>
+            <li>Efficient shortlisting of top-quality candidates</li>
+            <li>Faster hiring cycles</li>
+        </ul>
+    </div>
+    <div class="section shadow p-3 mb-5 bg-white rounded">
+        <h2 class="section-heading">Testimonials</h2>
+        <div class="testimonial-card">
+            <div class="card-body">
+                <h5 class="card-title">John Doe</h5>
+                <p class="card-text">"VHire helped us find the perfect candidates for our company. The streamlined process saved us time and resources."</p>
+            </div>
+        </div>
+        <div class="testimonial-card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">Jane Smith</h5>
+                <p class="card-text">"We were impressed by the quality of candidates provided by VHire. It made our hiring process much more efficient."</p>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .section-heading {
+        color: #007bff; /* Adjust as needed */
+    }
+</style>
+{% endblock %}
