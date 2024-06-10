@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}VHire{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar { background-color: #1E5D6C; }
+        .navbar a { color: white; }
+        .content { padding-bottom: 60px; } /* Adjust as needed */
+        .footer { background-color: #1E5D6C; padding: 10px; color: white; position: fixed; bottom: 0; width: 100%; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">VHire</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                {% for item in com_lan_menu_items %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
+                       
+
+                    </li>
+                {% endfor %}
+            </ul>
+           
+        </div>
+
+    </nav>
+
+
+    <div class="container content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 VHire. All rights reserved.</p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{% extends "company_landing_base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Company Profile</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Company Name:</strong> {{ company.company_name }}</p>
+            <p><strong>Address:</strong> {{ company.address }}</p>
+            <p><strong>Website:</strong> <a href="{{ company.website }}">{{ company.website }}</a></p>
+            <p><strong>Contact Number:</strong> {{ company.contact_number }}</p>
+            <a href="{% url 'company_landing:edit_company_profile' %}" class="btn btn-primary">Edit</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

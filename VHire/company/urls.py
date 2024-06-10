@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import register, login_view,home
+from company.views import register, login_view,home
 from django.contrib.auth.views import LogoutView
+
+app_name = 'company'
 
 urlpatterns = [
     path('',home, name='home'),

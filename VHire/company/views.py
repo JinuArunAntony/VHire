@@ -4,6 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from .forms import UserRegistrationForm, CompanyRegistrationForm
 from .models import MenuItem
+from company_landing.views import home
+from django.urls import reverse
 
 def register(request):
     if request.method == 'POST':
@@ -30,13 +32,14 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                #return redirect('/home')
+                return redirect(reverse('company_landing:home')+ '?username=' + username)
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
 def home(request):
-    print("hi")
+    
     return render(request, 'home.html')
 def about(request):
     return render(request, 'about.html')

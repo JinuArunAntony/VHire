@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'company'
+    'company',
+    'company_landing',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'company.context_processors.menu_items',  
+                'company_landing.context_processors.com_lan_menu_items',  
             ],
         },
     },

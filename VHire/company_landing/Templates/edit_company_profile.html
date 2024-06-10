@@ -1,0 +1,27 @@
+{% extends "company_landing_base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Edit Company Profile</h2>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="form-row">
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="form-group col-md-12">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="form-text text-muted">{{ field.help_text }}</small>
+                    {% endif %}
+                    {% for error in field.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'company_landing:company_profile' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

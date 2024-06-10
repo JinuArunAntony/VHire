@@ -3,18 +3,25 @@
 {% block title %}Login Page{% endblock %}
 
 {% block content %}
-    <!-- Your page content here -->
-    <h1>Login</h1>
-    <body>
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <!--<a href="{% url 'register' %}">Register Here</a>-->
-            <a href="/register">Register Here</a>
-
-            <button type="submit">Login</button>
-        </form>
-    </body>
+    <div class="container mt-5">
+      
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Login</h2>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="text-center">
+                                <a href="/register" class="btn btn-link">Register Here</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
