@@ -4,31 +4,47 @@
 
 {% block content %}
 <div class="container">
-    <div>
-        {% if request.GET.username %}
-        <h1>Welcome, {{ request.GET.username }}</h1>
-    {% endif %}
-    </div>
-    <div class="section shadow p-3 mb-5 bg-white rounded" style="margin-top: 50px;">
-        <h2 class="section-heading">Overview</h2>
-        <p>VHire is revolutionizing the hiring process by managing the initial stages of candidate evaluation, making it easier and more efficient for companies to find the right talent.</p>
-    </div>
-    <div class="section shadow p-3 mb-5 bg-white rounded">
-        
-        
-    </div>
-    <div class="section shadow p-3 mb-5 bg-white rounded">
-        <h2 class="section-heading">Testimonials</h2>
-        <div class="testimonial-card">
-            <div class="card-body">
-                <h5 class="card-title">John Doe</h5>
-                <p class="card-text">"VHire helped us find the perfect candidates for our company. The streamlined process saved us time and resources."</p>
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <!--<div class="sidebar shadow p-3 mb-5 bg-white rounded">
+                <h4 class="sidebar-heading">Menu</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'company_landing:all_jobs' %}">All Jobs</a>
+                    </li>
+                    
+                </ul>-->
             </div>
         </div>
-        <div class="testimonial-card mt-3">
-            <div class="card-body">
-                <h5 class="card-title">Jinu Arun Antony</h5>
-                <p class="card-text">"We were impressed by the quality of candidates provided by VHire. It made our hiring process much more efficient."</p>
+        
+        <!-- Main content -->
+        <div class="col-md-9">
+            <div>
+                {% if request.GET.username %}
+                <h1>Welcome, {{ request.GET.username }}</h1>
+                {% endif %}
+            </div>
+            <div class="section shadow p-3 mb-5 bg-white rounded" style="margin-top: 50px;">
+                <h2 class="section-heading">Overview</h2>
+                <p>VHire is revolutionizing the hiring process by managing the initial stages of candidate evaluation, making it easier and more efficient for companies to find the right talent.</p>
+            </div>
+            <div class="section shadow p-3 mb-5 bg-white rounded">
+            </div>
+            <div class="section shadow p-3 mb-5 bg-white rounded">
+                <h2 class="section-heading">Testimonials</h2>
+                <div class="testimonial-card">
+                    <div class="card-body">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">"VHire helped us find the perfect candidates for our company. The streamlined process saved us time and resources."</p>
+                    </div>
+                </div>
+                <div class="testimonial-card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Jinu Arun Antony</h5>
+                        <p class="card-text">"We were impressed by the quality of candidates provided by VHire. It made our hiring process much more efficient."</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -37,5 +53,12 @@
     .section-heading {
         color: #007bff; /* Adjust as needed */
     }
+    .sidebar-heading {
+        font-size: 1.5em;
+        margin-bottom: 1em;
+    }
+    .nav-link {
+        color: #007bff; /* Adjust as needed */
+    }
 </style>
-{% endblock %}
+{% endblock %}

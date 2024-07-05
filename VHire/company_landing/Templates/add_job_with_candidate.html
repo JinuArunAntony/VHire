@@ -1,0 +1,91 @@
+{% extends "company_landing_base.html" %}
+
+{% block title %}Add/View Jobs - VHire {% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Job and Candidates</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .candidate-form {
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .candidate-form .card-body {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Add Job</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_title" class="form-label">Job Title:</label>
+                {{ job_form.title }}
+            </div>
+            <div class="mb-3">
+                <label for="id_description" class="form-label">Description:</label>
+                {{ job_form.description }}
+            </div>
+            
+            <div class="mb-3">
+                <label for="id_location" class="form-label">Location:</label>
+                {{ job_form.location }}
+            </div>
+            
+
+            <h2 class="mt-5 mb-4">Candidates</h2>
+            <div id="candidates">
+                <input type="hidden" name="form-TOTAL_FORMS" id="id_form-TOTAL_FORMS" value="{{ candidate_forms|length }}">
+                {% for form in candidate_forms %}
+                    <div class="card mb-3 candidate-form">
+                        <div class="card-body">
+                            {{ form.as_p }}
+                            <button type="button" class="btn btn-danger mt-3 remove-candidate">Remove</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <button type="button" class="btn btn-primary mt-4" id="add-candidate">Add Candidate</button>
+            <button type="submit" class="btn btn-success mt-4">Save</button>
+        </form>
+    </div>
+
+    <div id="empty-form" style="display:none;">
+        <div class="card mb-3 candidate-form">
+            <div class="card-body">
+                {{ empty_candidate_form.as_p }}
+                <button type="button" class="btn btn-danger mt-3 remove-candidate">Remove</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var form_idx = $('#id_form-TOTAL_FORMS').val();
+            $('#add-candidate').click(function() {
+                var new_form = $('#empty-form').html().replace(/_prefix_/g, form_idx);
+                $('#candidates').append(new_form);
+                form_idx++;
+                $('#id_form-TOTAL_FORMS').val(form_idx);
+            });
+            $(document).on('click', '.remove-candidate', function() {
+                $(this).closest('.candidate-form').remove();
+                form_idx--;
+                $('#id_form-TOTAL_FORMS').val(form_idx);
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

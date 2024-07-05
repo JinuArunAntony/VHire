@@ -1,0 +1,255 @@
+{% extends 'company_landing_base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container">
+    <h1>All Jobs</h1>
+    
+    <!-- Search Form -->
+    <form method="get" class="form-inline mb-4">
+        <input type="text" name="q" class="form-control mr-sm-2" placeholder="Search by job title" value="{{ query }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Posted Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job.title }}</td>
+                <td>{{ job.location }}</td>
+                <td>{{ job.description }}</td>
+                <td>{{ job.posted_date }}</td>
+                <td>
+                    <div style="display:none;">Job ID: {{ job.id }}</div>
+                    <button class="btn btn-primary" onclick="toggleCandidates(parseInt('{{ job.id }}'))">More Details</button>
+                    <button class="btn btn-warning" onclick="openEditJobModal(parseInt('{{ job.id }}'))">Edit</button>
+                    <button class="btn btn-danger" onclick="openDeleteJobModal(parseInt('{{ job.id }}'))">Delete</button>
+                </td>
+            </tr>
+            <tr id="candidates-{{ job.id }}" class="candidate-rows" style="display: none;">
+                <td colspan="5">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Applied Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% with job_candidates|get_item:job.id as candidates %}
+                                {% if candidates %}
+                                    {% for candidate in candidates %}
+                                    <tr>
+                                        <td>{{ candidate.first_name }}</td>
+                                        <td>{{ candidate.last_name }}</td>
+                                        <td>{{ candidate.email }}</td>
+                                        <td>{{ candidate.applied_date }}</td>
+                                        <td>
+                                            {% if candidate.user %}
+                                                <button class="btn btn-warning" onclick="openEditCandidateModal(parseInt('{{ candidate.user.id }}'))">Edit</button>
+                                                <button class="btn btn-danger" onclick="openDeleteCandidateModal(parseInt('{{ candidate.user.id }}'))">Delete</button>
+                                            {% else %}
+                                                No user associated
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5">No candidates have applied for this job yet.</td>
+                                    </tr>
+                                {% endif %}
+                            {% endwith %}
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Modals -->
+<div id="editJobModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Job</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editJobForm" method="post">
+                    {% csrf_token %}
+                    <div id="editJobFormFields"></div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editCandidateModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Candidate</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editCandidateForm" method="post">
+                    {% csrf_token %}
+                    <div id="editCandidateFormFields"></div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="deleteConfirmationModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this item?</p>
+                <form id="deleteForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
+
+    function toggleCandidates(jobId) {
+        var candidatesRow = document.getElementById('candidates-' + jobId);
+        candidatesRow.style.display = (candidatesRow.style.display === 'none') ? 'table-row' : 'none';
+    }
+
+    function openEditJobModal(jobId) {
+        fetch(`/all_jobs/edit/${jobId}/`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('editJobFormFields').innerHTML = data.form;
+            document.getElementById('editJobForm').action = `/all_jobs/edit/${jobId}/`;
+            $('#editJobModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function submitEditJobForm(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                return response.json().then(data => {
+                    document.getElementById('editJobFormFields').innerHTML = data.form;
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function openEditCandidateModal(candidateId) {
+        fetch(`/candidates/edit/${candidateId}/`, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('editCandidateFormFields').innerHTML = data.form;
+            document.getElementById('editCandidateForm').action = `/candidates/edit/${candidateId}/`;
+            $('#editCandidateModal').modal('show');
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function submitEditCandidateForm(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken': csrftoken,
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                return response.json().then(data => {
+                    document.getElementById('editCandidateFormFields').innerHTML = data.form;
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function openDeleteJobModal(jobId) {
+        document.getElementById('deleteForm').action = `/all_jobs/delete/${jobId}/`;
+        $('#deleteConfirmationModal').modal('show');
+    }
+
+    function openDeleteCandidateModal(candidateId) {
+        document.getElementById('deleteForm').action = `/candidates/delete/${candidateId}/`;
+        $('#deleteConfirmationModal').modal('show');
+    }
+</script>
+{% endblock %}
